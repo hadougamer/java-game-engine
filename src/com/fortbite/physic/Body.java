@@ -1,5 +1,7 @@
 package com.fortbite.physic;
 
+import java.awt.Rectangle;
+
 public class Body {
 	// Body States
 	private boolean jumping=false;
@@ -20,6 +22,11 @@ public class Body {
 	
 	// Size
 	protected int width, height;
+	
+	// Hitbox
+	private Rectangle hitbox;
+	
+	public boolean colliding = false;
 	
 	// Updates the body location
 	public void updateLocation() {
@@ -45,6 +52,20 @@ public class Body {
         x = x + velX;
 	}
 
+	public boolean isColliding( Body body ) {
+		colliding = isHitboxColliding( body.hitbox );
+		
+		return colliding;
+	}
+	
+	public boolean isHitboxColliding( Rectangle hitbox ) {
+		return this.hitbox.intersects( hitbox );
+	}
+	
+	public void setHitbox(int x, int y, int width, int height) {
+		hitbox = new Rectangle(x, y, width, height );
+	}
+	
 	public double getVelX() {
 		return velX;
 	}
@@ -92,6 +113,14 @@ public class Body {
 
 	public void setWalking(boolean walking) {
 		this.walking = walking;
+	}
+
+	public Rectangle getHitbox() {
+		return hitbox;
+	}
+
+	public void setHitbox(Rectangle hitbox) {
+		this.hitbox = hitbox;
 	}
 	
 }

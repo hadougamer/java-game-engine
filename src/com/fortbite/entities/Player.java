@@ -2,23 +2,26 @@ package com.fortbite.entities;
 
 import java.awt.Graphics;
 
-import com.fortbite.main.Camera;
-import com.fortbite.main.Game;
+import com.fortbite.variables.Common;
 
 public class Player extends Entity {
 	public double speed = 3;
 	public String action;
-	private String spritePath = "/sprite01.png";
+	private String spritePath = Common.SPR_01;
 	
 	public static boolean dirRight = true;
 	
 	public Player(int x, int y) {
-		setVelY(5); // Jump velocity
+		setVelY(6);
+		setType("player");
 		setSprite(spritePath);
 		setX(x);
 		setY(y);
 		setWidth(16);
-		setWidth(16);
+		setHeight(16);
+		
+		// Hitbox
+		setHitbox(x, y, width, height);
 		
 		// Default action
 		loadFrames("stop");
@@ -32,22 +35,22 @@ public class Player extends Entity {
 			case "walk-right":
 				dirRight = true;
 				setVelX(speed);
-				updateLocation();
 			break;			
 			case "walk-left":
 				dirRight = false;
 				setVelX(-speed);
-				updateLocation();
 			break;
 			case "stop":
-				if ( !isJumping() && !isFalling() ) {
-					setVelX(0);
-				}
-				updateLocation();
+				setVelX(0);
 			break;
 		}
+
+		//Camera.x = getX() - (Game.width/2);
+		//Camera.y = getY() - (Game.height/2);
+		updateLocation();
+		setHitbox(getX(), getY(), getWidth(), getHeight());
+		
 		loadFrames(action);
-		Camera.x = (int) (x - (Game.width/2));
 	}
 	
 	private void loadFrames( String act ) {
@@ -83,8 +86,8 @@ public class Player extends Entity {
 	public void render( Graphics g ) {
 		g.drawImage(
 			getFrame(), 
-			(int) (getX() - Camera.x), 
-			(int) (getY() - Camera.y), 
+			(int) getX(), 
+			(int) getY(), 
 			null
 		);
 	}

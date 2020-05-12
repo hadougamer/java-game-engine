@@ -4,9 +4,10 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import com.fortbite.main.Camera;
+import com.fortbite.entities.Platform;
 import com.fortbite.images.Sprite;
 import com.fortbite.images.Tile;
+import com.fortbite.variables.Common;
 
 public class Level {
 
@@ -19,7 +20,7 @@ public class Level {
 	protected ArrayList<Tile> tiles = new ArrayList<Tile>();
 	
 	public Level( int number ) {
-		this.spritePath = "/sprite01.png";
+		this.spritePath = Common.SPR_01;
 		this.mapPath = "/map05.png";
 		
 		loadMap(this.mapPath);
@@ -59,13 +60,12 @@ public class Level {
 						tileType = "wall";
 					break;
 					case 0xFF49ff00:
+						Game.entities.add(new Platform(posX, posY));
 						tileType = "floor";
 					break;
 					case 0xFF0058ff:
 						Game.hero.setX(posX);
 						Game.hero.setY(posY);
-						
-						// Sets the hero floor (physic)
 						Game.hero.setFloorY(posY);
 					break;
 				}

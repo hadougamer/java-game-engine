@@ -4,10 +4,12 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import com.fortbite.entities.Entity;
@@ -85,12 +87,21 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		// Render the Level
 		level.render(g);
 		
-		// Render entities
 		for( int i=0; i<entities.size(); i++ ) {
 			if ( entities.get(i) instanceof Player ) {
-				showDebug( heroAction );
 				entities.get(i).doAction( heroAction );
 			}
+			
+			/*
+			if ( entities.get(i) instanceof Platform ) {
+				if ( entities.get(i).isColliding( Game.hero ) ) {
+					System.out.println("Colliding!");
+					Game.hero.setY(
+							entities.get(i).getY() - entities.get(i).getHeight()
+					);
+				}
+			}
+			*/
 			
 			entities.get(i).render(g);
 		}
@@ -131,7 +142,6 @@ public class Game extends Canvas implements Runnable, KeyListener {
 	
 	/* KeyListener methods */
 	public void keyPressed(KeyEvent e) {
-		heroAction = "stop";
 		switch( e.getKeyCode() ) {
 			case KeyEvent.VK_RIGHT:
 				heroAction = "walk-right";
@@ -150,7 +160,12 @@ public class Game extends Canvas implements Runnable, KeyListener {
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// On Key Up
-		heroAction = "stop";
+		switch( e.getKeyCode() ) {
+			case KeyEvent.VK_RIGHT:
+			case KeyEvent.VK_LEFT:
+				heroAction = "stop";
+			break;
+		}
 	}
 
 	@Override
@@ -190,13 +205,6 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		stop();
 	}
 	
-	/* Debug */
-	private void showDebug( String message ) {
-		if ( DEBUG ) {
-			System.out.println( message );	
-		}
-	}
-	
 	private void addEntity( Entity entity ) {
 		entities.add(entity);
 	}
@@ -207,5 +215,16 @@ public class Game extends Canvas implements Runnable, KeyListener {
 	
 	public int getHeight() {
 		return (int) (height * scale);
+	}
+	
+	/* Debug */
+	private void showDebug( String message ) {
+		if ( DEBUG ) {
+			System.out.println( message );	
+		}
+	}
+	private void debugBox( Graphics g, Rectangle box) {
+		Graphics2D g2 = (Graphics2D) g;
+		g2.draw( box );
 	}
 }

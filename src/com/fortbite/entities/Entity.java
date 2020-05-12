@@ -19,6 +19,9 @@ public class Entity extends Body {
 	private int frameControl = 0;
 	private int maxFrameControl = 4;
 	
+	// Type of entity (Player. Platform...)
+	private String type;
+	
 	// Lista of frames
 	protected ArrayList<BufferedImage> frames = new ArrayList<BufferedImage>();
 	
@@ -40,6 +43,14 @@ public class Entity extends Body {
 	
 	public int getY() {
 		return (int) y;
+	}
+	
+	public int getWidth() {
+		return (int) width;
+	}
+	
+	public int getHeight() {
+		return (int) height;
 	}
 	
 	public void setWidth( int width) {
@@ -87,5 +98,13 @@ public class Entity extends Body {
 	
 	protected void cleanFrames() {
 		frames.clear();
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 }
